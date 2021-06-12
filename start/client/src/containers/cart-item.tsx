@@ -2,7 +2,7 @@ import React from 'react';
 import { gql, useQuery } from '@apollo/client';
 
 import LaunchTile from '../components/launch-tile';
-import { LAUNCH_TILE_DATA } from '../pages/launches';
+import { LAUNCH_TILE_DATA } from '../gql/launches';
 import * as LaunchDetailTypes from '../pages/__generated__/LaunchDetails';
 
 export const GET_LAUNCH = gql`

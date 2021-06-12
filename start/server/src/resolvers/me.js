@@ -1,1 +1,2 @@
-module.exports = (_, __, {dataSources}) => dataSources.userAPI.findOrCreateUser();
+module.exports = async (_, __, {dataSources}) =>
+    dataSources.userAPI.findOrCreateUser();

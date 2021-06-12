@@ -1,27 +1,44 @@
-import React, { Fragment, useState }  from 'react';
-import { RouteComponentProps } from '@reach/router';
-import { gql } from '@apollo/client'
+import {useQuery} from '@apollo/client';
+import React, {useState} from 'react';
+import {RouteComponentProps} from '@reach/router';
+import {LoadDataContainer} from '../containers/LoadDataContainer';
+import {GET_LAUNCHES} from '../gql/launches';
+import * as GetLaunchListTypes from './__generated__/GetLaunchList';
+import {Button, Header, LaunchTile, Loading} from '../components';
 
-export const LAUNCH_TILE_DATA = gql`
-  fragment LaunchTile on Launch {
-    __typename
-    id
-    isBooked
-    rocket {
-      id
-      name
-    }
-    mission {
-      name
-      missionPatch
-    }
-  }
-`;
-
-interface LaunchesProps extends RouteComponentProps {}
+interface LaunchesProps extends RouteComponentProps {
+}
 
 const Launches: React.FC<LaunchesProps> = () => {
-  return <div />;
-}
+    const {data, loading, error, fetchMore} = useQuery<GetLaunchListTypes.GetLaunchList,
+        GetLaunchListTypes.GetLaunchListVariables>(GET_LAUNCHES);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+    const onFetchMore = async () => {
+        setIsLoadingMore(true);
+        await fetchMore({
+            variables: {
+                after: data?.launches?.cursor,
+            },
+        });
+        setIsLoadingMore(false);
+    };
+
+    return (
+        <LoadDataContainer data={data} loading={loading} error={error}>
+            <>
+                <Header />
+                {data?.launches?.launches?.map((launch: any) => (
+                    <LaunchTile key={launch.id} launch={launch} />
+                ))}
+                {data?.launches?.hasMore && (
+                    isLoadingMore
+                        ? <Loading />
+                        : <Button onClick={onFetchMore}>Load More</Button>
+                )}
+            </>
+        </LoadDataContainer>
+    )
+};
 
 export default Launches;

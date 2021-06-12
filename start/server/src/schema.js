@@ -1,4 +1,4 @@
-const {gql} = require('apollo-server');
+const { gql } = require('apollo-server');
 
 const typeDefs = gql`
     type Query {
@@ -17,9 +17,19 @@ const typeDefs = gql`
     }
 
     type Mutation {
+        # if false, signup failed -- check errors
         bookTrips(launchIds: [ID]!): TripUpdateResponse!
+
+        # if false, cancellation failed -- check errors
         cancelTrip(launchId: ID!): TripUpdateResponse!
+
         login(email: String): User
+    }
+
+    type TripUpdateResponse {
+        success: Boolean!
+        message: String
+        launches: [Launch]
     }
 
     """
@@ -27,16 +37,10 @@ const typeDefs = gql`
     last item in the list. Pass this cursor to the launches query to fetch results
     after these.
     """
-    type LaunchConnection { # add this below the Query type as an additional type.
+    type LaunchConnection {
         cursor: String!
         hasMore: Boolean!
         launches: [Launch]!
-    }
-
-    type TripUpdateResponse {
-        success: Boolean!
-        message: String
-        launches: [Launch]
     }
 
     type Launch {
@@ -56,6 +60,7 @@ const typeDefs = gql`
     type User {
         id: ID!
         email: String!
+        profileImage: String
         trips: [Launch]!
         token: String
     }

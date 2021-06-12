@@ -1,5 +1,5 @@
 module.exports = async (_, {launchId}, {dataSources}) => {
-    const result = await dataSources.userAPI.cancelTrip({launchId});
+    const result = dataSources.userAPI.cancelTrip({launchId});
 
     if (!result)
         return {
