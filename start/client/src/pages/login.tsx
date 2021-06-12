@@ -1,13 +1,15 @@
 import {useMutation} from '@apollo/client';
 import React from 'react';
 import {useCookies} from 'react-cookie';
+import {isLoggedInVar} from '../cache';
 import {LoginForm} from '../components';
 import {USER_ID, USER_TOKEN} from '../constants';
+import {LoadDataContainer} from '../containers/LoadDataContainer';
 import {LOGIN_USER} from '../gql/profile';
 import * as LoginTypes from './__generated__/login';
 
 export default function Login() {
-    const [cookies, setCookies] = useCookies();
+    const [_, setCookies] = useCookies();
     const [login, {loading, error}] = useMutation<LoginTypes.Login,
         LoginTypes.LoginVariables>(
         LOGIN_USER,
@@ -23,9 +25,14 @@ export default function Login() {
                         sameSite: 'lax',
                         expires: expires,
                     });
+                    isLoggedInVar(true);
                 }
             },
         });
 
-    return <div />;
+    return (
+        <LoadDataContainer loading={loading} error={error} checkData={false}>
+            <LoginForm login={login} />
+        </LoadDataContainer>
+    );
 }

@@ -32,7 +32,6 @@ const Profile: React.FC<ProfileProps> = () => {
             </>
         </LoadDataContainer>
     );
-    return <div />;
 };
 
 export default Profile;

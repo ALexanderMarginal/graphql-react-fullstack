@@ -1,9 +1,8 @@
-import Cookies from 'universal-cookie';
 import {ApolloClient, NormalizedCacheObject} from '@apollo/client';
 import {cache} from '../cache';
 import {USER_TOKEN} from '../constants';
-
-const cookies = new Cookies();
+import cookies from '../cookies';
+import {typeDefs} from './typeDefs';
 
 export const apolloClient: ApolloClient<NormalizedCacheObject> = new ApolloClient({
     cache,
@@ -11,4 +10,5 @@ export const apolloClient: ApolloClient<NormalizedCacheObject> = new ApolloClien
     headers: {
         authorization: cookies.get(USER_TOKEN) || '',
     },
+    typeDefs,
 });

@@ -22,3 +22,9 @@ export const GET_MY_TRIPS = gql`
     }
     ${LAUNCH_TILE_DATA}
 `;
+
+export const IS_LOGGED_IN = gql`
+    query IsUserLoggedIn {
+        isLoggedIn @client
+    }
+`;
